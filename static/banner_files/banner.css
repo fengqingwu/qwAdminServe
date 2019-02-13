@@ -1,0 +1,78 @@
+.banner{
+	width:100%;
+	height:500px;
+	background-color:aqua;
+	position:relative;
+	overflow:hidden;
+	cursor:pointer}
+.imgbox{
+	width:100%;
+	height:500px;
+	position:relative;
+	background-color:rgb(8,8,49);
+	overflow:hidden}
+.img{
+	position:absolute;
+	display:none;
+	left:50%;
+	margin-left:-683px}
+.im{
+	display:block}
+.change{
+	height:100px;
+	display:block;
+	position:absolute;
+	z-index:20;
+	opacity:.4;
+	transition:.4s;
+	top:50%;
+	margin-top:-50px}
+.change:hover{
+	opacity:1}
+.pre{
+	left:1%}
+.next{
+	right:1%}
+.cirbox{
+	width:146px;
+	position:absolute;
+	bottom:35px;
+	z-index:10;
+	left:50%;
+	margin-left:-73px;
+	cursor:pointer}
+.cir{
+	width:30px;
+	height:10px;
+	background-color:#fff;
+	opacity:.4;
+	float:left;
+	/* -o-transition: width 0.2s;
+	-ms-transition: width 0.2s;
+	-moz-transition: width 0.2s;
+	-webkit-transition: width 0.2s;
+	transition: width 0.2s; */
+	/*border-radius:6px;*/
+	/* margin:0 5px; */
+	cursor:pointer;
+}
+.cir + .cir{
+	margin-left: 5px;
+}
+.cir:hover{
+	background-color:cyan;
+	transition:.8s
+}
+.cr{
+	width: 36px;
+	opacity:1;
+}
+.cr:hover{
+	background-color:#fff;
+}
+#imageBox{
+    -ms-transition: all 0.5s ease-in;
+    -moz-transition: all 0.5s ease-in;
+    -webkit-transition: all 0.5s ease-in;
+    transition: all 0.5s ease-in;
+}

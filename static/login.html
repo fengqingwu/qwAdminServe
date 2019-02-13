@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>平台登录</title>
+    <script src="/index_files/jquery.min.js"></script>
+    <script src="/lib/layer/layer.js"></script>
+    <script src="/lib/base64.js"></script>
+    <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+    <script type="text/javascript">
+        console.log(returnCitySN["cip"] + ',' + returnCitySN["cname"])  
+    </script>
+    <style>
+        html, body, div, span, applet, object, iframe,
+        h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+        a, abbr, acronym, address, big, cite, code,
+        del, dfn, em, img, ins, kbd, q, s, samp,
+        small, strike, strong, sub, sup, tt, var,
+        b, u, i, center,
+        dl, dt, dd, ol, ul, li,
+        fieldset, form, label, legend,
+        table, caption, tbody, tfoot, thead, tr, th, td,
+        article, aside, canvas, details, embed, 
+        figure, figcaption, footer, header, hgroup, 
+        menu, nav, output, ruby, section, summary,
+        time, mark, audio, video {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+        }
+        /* HTML5 display-role reset for older browsers */
+        article, aside, details, figcaption, figure, 
+        footer, header, hgroup, menu, nav, section {
+            display: block;
+        }
+        body {
+            line-height: 1;
+        }
+        ol, ul {
+            list-style: none;
+        }
+        blockquote, q {
+            quotes: none;
+        }
+        blockquote:before, blockquote:after,
+        q:before, q:after {
+            content: '';
+            content: none;
+        }
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+        .box{
+            box-sizing: border-box;
+            width: 100%;
+            min-height: 100vh;
+            background: #FFF url("./img/bg1.png");
+            position: relative;
+        }
+        .loginBox{
+            width: 540px;
+            height: 400px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            position: absolute;
+            left: 50%;
+            top:15vh;
+            -o-transform: translateX(-50%);
+            -ms-transform: translateX(-50%);
+            -moz-transform: translateX(-50%);
+            -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+            background: rgb(249,249,251);
+        }
+        .imgbox{
+            width: 100%;
+            height: 58px;
+            -o-transform: translateY(30px);
+            -ms-transform: translateY(30px);
+            -moz-transform: translateY(30px);
+            -webkit-transform: translateY(30px);
+            transform: translateY(30px);
+            background: url("./img/bj2.png");
+        }
+        .formBox{
+            margin-top: 80px;
+        }
+        .formBox .formItem{
+            display: block;
+            width: 365px;
+            margin: 0 auto;
+            height: 62px;
+            line-height: 32px;
+            position: relative;
+        }
+        .formBox input{
+            box-sizing: border-box;
+            padding: 0 10px;
+            display: inline-block;
+            width: 300px;
+            margin-left: 65px;
+            height: 32px;
+            line-height: 32px;
+        }
+        .formBox .label{
+            position: absolute;
+            box-sizing: border-box;
+            color: #333;
+            font-size: 16px;
+            text-align: right;
+            display: inline-block;
+            width: 65px;
+            float: left;
+            line-height: 32px;
+            height: 32px;
+            left: 0;
+            top: 0;
+        }
+        .btnbox{
+            margin-top: 10px;
+            text-align: center;
+        }
+        .qwBtn{
+            display: inline-block;
+            width: 88px;
+            line-height: 32px;
+            height: 32px;
+            background: #4099EF;
+            color: #FFF;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 2px;
+            box-shadow: 0 0 6px rgb(0,0,0,0.1);
+        }
+        .qwBtn:hover{
+            transform: translateY(-1px);
+            box-shadow: 0 0 6px rgb(0,0,0,0.3);
+        }
+        .qwBtn:active{
+            transform: translateY(1px);
+        }
+        .qwBtn + .qwBtn{
+            margin-left: 10px;
+        }
+        .errMsg{
+            display:block;
+            color: rgb(242,50,50);
+            line-height: 20px;
+            font-size: 10px;
+            padding-left: 65px;
+        }
+        #code{
+            -o-transform:  translateY(2px);
+            -ms-transform:  translateY(2px);
+            -moz-transform:  translateY(2px);
+            -webkit-transform:  translateY(2px);
+            transform:  translateY(2px);
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <div class="loginBox" id="fromLogin">
+        <div class="imgbox">
+        </div>
+        <div class="formBox">
+            <p class="formItem">
+                <span class="label">用户名：</span>
+                <input name="userName" autocomplete="off" type="text" placeholder="请输入用户名">
+                <span id="errmsg1" class="errMsg"></span>
+            </p>
+            <p class="formItem">
+                <span class="label">密码：</span>
+                <input name="passWord" type="text" autocomplete="off" onfocus="this.type='password'" placeholder="请输入密码">
+                <span id="errmsg2"  class="errMsg"></span>
+            </p>
+            <p class="formItem">
+                <span class="label">验证码：</span>
+                <input name="code" autocomplete="off" style="width:180px;" type="text" placeholder="请输入验证码">
+                <canvas style="float:right;" width=100 height=32 id='code'></canvas>
+                <span id="errmsg3" class="errMsg"></span>
+            </p>
+        </div>
+        <p id="data"></p>
+        <p class="btnbox">
+            <span class="qwBtn">登录</span>
+            <span class="qwBtn">重置</span>
+        </p>
+    </div>
+</div>
+</body>
+<script>
+    var domSel= function (selector){
+        if("string"!= typeof(selector) || ("" == selector)){
+            return null;
+        }
+        return document.body.querySelectorAll(selector);
+    }
+    var qwBind = function (dom,evtName,cb) {
+        if(dom)dom.addEventListener(evtName,function (e) {
+            if("function"== typeof(cb)){
+                cb(e);
+            }
+        })
+    }
+    var qwUnBind = function (dom,evtName,cb) {
+        if(dom && ("function" == typeof (cb))){
+            dom.removeEventListener(evtName, cb);
+        }
+    }
+    function Ajax(obj) {
+        this.method = obj.method || '';
+        this.url = obj.url || '';
+        this.callback = obj.callback || '';
+        this.data = obj.data || '';
+    };
+    Ajax.prototype.send = function (method, url, callback, data) {
+        var method = method || this.method;
+        var data = data || this.data;
+        var url = url || this.url;
+        var callback = callback || this.callback;
+        var xhr = new XMLHttpRequest();//新建ajax请求，不兼容IE7以下
+        xhr.onreadystatechange = function () {//注册回调函数
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200)
+                    callback(xhr.responseText);
+                else
+                    alert('服务失败！');
+            }
+        }
+        if (method === 'get') {//如果是get方法，需要把data中的数据转化作为url传递给服务器
+            if (typeof data === 'object') {
+                var data_send = '?';
+                for (var key in data) {
+                    data_send += key + '=' + data[key];
+                    data_send += '&';
+                }
+                data_send = data_send.slice(0, -1);
+                // console.log(data_send);
+            }
+            xhr.open(method, url + data_send, true);
+            xhr.send(null);
+        } else if (method === 'post') {//如果是post，需要在头中添加content-type说明
+            xhr.open(method, url, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify(data));//发送的数据需要转化成JSON格式
+        } else {
+            // console.log('不识别的方法:' + method);
+            return fasle;
+        }
+    }
+/*
+var ajax = new Ajax({
+  method:'get',//设置ajax方法
+  url:'http://localhost:3000',//设置通讯地址
+  callback:function(res){//设置回调函数
+     alert(res)
+  },
+  data: data//需要传递的数据
+})
+ajax.send();
+*/
+window.onload = function (){
+    var formData={
+        userName: "",
+        userPass: "",
+        code:""
+    }
+    var inputs = domSel(".formBox input");
+    var errMsg = domSel(".formBox .errMsg");
+    var btns = domSel(".loginBox .qwBtn");
+    var validates = {
+        userName: function () {
+            if ("" == formData.userName) {
+                errMsg[0].innerHTML = "用户名不能为空";
+                return false;
+            } else if (!(/[a-zA-Z0-9_]{6,20}/.test(formData.userName))) {
+                errMsg[0].innerHTML = "用户名由字母数字下划线组成的6-20个字符组成！";
+                return false;
+            } else {
+                errMsg[0].innerHTML = "";
+                return true;
+            }
+        },
+        userPass: function(){
+            if ("" == formData.userPass) {
+                errMsg[1].innerHTML = "用户密码不能为空";
+                return false;
+            } else if (formData.userPass.length < 6 || (formData.userPass.length > 20)) {
+                errMsg[1].innerHTML = "用户密码由6-20位字符组成！";
+                return false;
+            } else {
+                errMsg[1].innerHTML = "";
+                return true;
+            }
+        },
+        code: function () {
+            if(""== formData.code){
+                errMsg[2].innerHTML = "验证码不能为空！";
+                return false;
+            } else if(formData.code.toLocaleLowerCase() != code.toLocaleLowerCase().replace(/\ /g,"")){
+                errMsg[2].innerHTML = "验证码错误！";
+                return false;
+            } else {
+                errMsg[2].innerHTML =  "";
+                return true;
+            }       
+        },
+        clearValidate : function () {
+            errMsg[0].innerHTML = "";
+            errMsg[1].innerHTML = "";
+        }
+    }
+    var validate = function (rules,cb) {
+        let tag = true;
+        for(let attr in rules){            
+            if('clearValidate'!= attr &&("function" == typeof(rules[attr]))){
+                // console.log("attr==>", attr);
+                if(!rules[attr]()){
+                    tag = false;
+                    break;
+                }
+            }
+        }
+        if(tag && 'function' == typeof(cb)){
+            cb();
+        }
+    }
+    Object.defineProperty(formData, "userName", {
+        get() {
+            return inputs[0].value;
+        },
+        set(val) {
+            inputs[0].value = val;
+        }
+    });
+    Object.defineProperty(formData, "userPass", {
+        get() {
+            return inputs[1].value;
+        },
+        set(val) {
+            inputs[1].value = val;
+        }
+    });
+    Object.defineProperty(formData, "code", {
+        get() {
+            return inputs[2].value;
+        },
+        set(val) {
+            inputs[2].value = val;
+        }
+    });
+    qwBind(inputs[0],"input",function (e) {
+        formData.userName = inputs[0].value;
+        validates.userName();
+    });    
+    qwBind(inputs[1], "input", function (e) {
+        formData.userPass = inputs[1].value;
+        validates.userPass();
+    });
+    qwBind(inputs[2],"input", function (e) {
+        formData.code = inputs[2].value;
+        validates.code();
+    })
+    qwBind(btns[0],"click", function (e) {
+        validate(validates,
+            function () {
+                var ajax = new Ajax({
+                    method: 'post',//设置ajax方法
+                    url: '/login',//设置通讯地址
+                    callback: function (res) {//设置回调函数
+                        res = JSON.parse(res);
+                        if(res.result){
+                            // alert("登录成功!");
+                            delete formData.userPass;
+                            layer.msg("登录成功!页面即将跳转...");
+                            window.localStorage.setItem("user",JSON.stringify(formData));
+                            setTimeout(() => {
+                                window.location.href = "/index.html"
+                            }, 1000);
+                        }else{
+                            createCanvas();
+                            layer.msg(res.message);
+                        }
+                    },
+                    data: formData//需要传递的数据
+                })
+                ajax.send();
+                // alert("登录")
+            }
+        ) 
+    })
+    qwBind(btns[1],"click",function (e) {
+        inputs[0].value = "";
+        inputs[1].value = "";
+        inputs[2].value = "";
+        validates.clearValidate();
+    })
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // function compile(code) {
+    //     var c = String.fromCharCode(code.charCodeAt(0) + code.length);
+    //     for (var i = 1; i < code.length; i++) {
+    //         c += String.fromCharCode(code.charCodeAt(i) + code.charCodeAt(i - 1));
+    //     }
+    //     return escape(c);
+    // }
+    // // 解密函数
+    // function uncompile(code) {
+    //     code = unescape(code);
+    //     var c = String.fromCharCode(code.charCodeAt(0) - code.length);
+    //     for (var i = 1; i < code.length; i++) {
+    //         c += String.fromCharCode(code.charCodeAt(i) - c.charCodeAt(i - 1));
+    //     }
+    //     return c;
+    // }
+    var arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    for (var i = 65; i < 122; i++) {
+        if (i > 90 && i < 97) {
+            continue;
+        }
+        arr.push(String.fromCharCode(i));
+    }
+    //每个验证码可能出现的字母或数字(区分大小写)
+    var len = arr.length;
+    //验证码的长度
+    var canvasStr, value,code;
+    //验证码值
+    function createCanvas() {
+        canvasStr = '';
+        value = '';
+        for (var i = 0; i < 4; i++) {
+            var a = arr[Math.floor(Math.random() * len)];
+            canvasStr += a + ' ';
+            value += a;
+        }
+        code = canvasStr;//compile(canvasStr);
+        //canvas
+        var oCanvas = document.getElementById('code');
+        var ctx = oCanvas.getContext('2d');
+        var w = oCanvas.width;
+        var h = oCanvas.height;
+        var oImg = new Image();
+        oImg.src = './img/bg1.png';
+        oImg.onload = function () {
+            var pattern = ctx.createPattern(oImg, 'repeat');
+            ctx.fillStyle = pattern;
+            ctx.fillRect(0, 0, w, h);
+            ctx.fillStyle = '#ccc';
+            ctx.textAlign = 'center';
+            ctx.font = '20px Roboto Slab';
+            ctx.setTransform(1, -0.12, 0.2, 1, 0, 12);
+            ctx.fillText(canvasStr, w / 2, 20);
+        }
+        oCanvas.onclick = function (params) {
+            createCanvas()
+        }
+    }
+    createCanvas();
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+let key ={ip: returnCitySN["cip"],tm: new Date().getTime()};
+ console.log("key==>",key, Base.encode(JSON.stringify(key)));
+
+}
+</script>
+</html>

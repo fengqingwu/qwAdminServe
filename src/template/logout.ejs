@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><%= title %></title>
+</head>
+<body style="height:100vh;">
+    <h1 style="text-align:center;"><%= msg %>， 页面将在<span id="wait"><%= timeout %></span>s后跳转。<a id="href" href="<%= href %>">立即跳转</a></h1>
+</body>
+<script type="text/javascript">            
+    (function () {
+        var wait = document.getElementById('wait'), href = document.getElementById('href').href;
+        var interval = setInterval(function () {
+            var time = --wait.innerHTML;
+            localStorage.setItem("user", null);
+            if (time <= 0) {
+                clearInterval(interval);
+                location.href = href;
+            }
+            ;
+        }, 1000);
+    })();
+</script>
+</html>

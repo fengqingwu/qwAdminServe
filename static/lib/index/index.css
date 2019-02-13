@@ -1,0 +1,13 @@
+html,body{
+    margin:0;
+    padding:0;
+    box-shadow: border-box;
+}
+.navBox{
+    width: 100%;
+    height: 45px;
+    background: #FFF;
+}
+.shadowBox{
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
